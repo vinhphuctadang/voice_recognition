@@ -1,0 +1,18 @@
+dữ liệu sưu tập từ 
+https://sites.google.com/site/tusachtuoihoa/truyen-tuoi-hoa/chua-tat-nu-cuoi---loai-hoa-tim/chua-tat-nu-cuoi---chuong-1
+https://sites.google.com/site/tusachtuoihoa/truyen-tuoi-hoa/chua-tat-nu-cuoi---loai-hoa-tim/chua-tat-nu-cuoi---chuong-2
+https://ocuaso.com/tho-viet-nam/chum-tho-bat-hu/nhung-ang-tho-tinh-hay-nhat-cua-ong-hoang-tho-tinh-xuan-dieu.html
+
+def cycle (int u):
+	
+	if (color[u] == grey):
+		return false
+	color[u] = grey
+	for v in adj[u]:
+		
+		if (color[v] != 2) and not cycle(u):
+			return false
+
+	color[u] = 2
+	return true
+
