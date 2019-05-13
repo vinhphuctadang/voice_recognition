@@ -106,6 +106,25 @@ def voice_lobe_4th_2nd ():
 	# classifier.add (Activation('sigmoid'))
 	classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 	return classifier
+
+def voice_lobe_5th ():
+	classifier = Sequential()
+
+	classifier.add (Conv1D (64, 3, input_shape = (99, 13))) 
+	classifier.add (Conv1D (128, 3))
+	classifier.add (MaxPooling1D (pool_size = 3))
+	classifier.add (Dropout(0.2))
+	classifier.add (Conv1D (100, 3))
+	classifier.add (LSTM (100))
+	classifier.add(Dropout(0.2))
+	# classifier.add (LSTM (10, return_sequences = False))
+	classifier.add (Dense (10, activation='relu'))
+	classifier.add (Dense (2, activation = 'sigmoid'))
+	# classifier.add (Activation('sigmoid'))
+	classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+	return classifier
+
+
 def save_lobe (lobe,name='model.keras'):
 	lobe.save(name)
 
@@ -217,7 +236,7 @@ def main ():
 	# print (listFile (pattern=['khong*']))
 	lobe = None
 	if not os.path.isfile ('model.keras'):
-		lobe = voice_lobe_4th_2nd ()
+		lobe = voice_lobe_5th ()
 		print (lobe.summary ())
 		# return;
 		yes, no = collect ()
@@ -280,32 +299,32 @@ def main ():
 	# print (lobe.summary ())
 	# save_lobe (lobe)
 
-	registerCtrlC ()
-	import soundlit as sl
-	stream = sl.getStream ()
-	while 1:
-		print ('hnhu is listening ... ')
-		# wav = sl.record (stream, time=1)
+	# registerCtrlC ()
+	# import soundlit as sl
+	# stream = sl.getStream ()
+	# while 1:
+	# 	print ('hnhu is listening ... ')
+	# 	# wav = sl.record (stream, time=1)
 
-		# if np.amax(wav) - np.amin(wav) <= 2500:
-		# 	continue
-		wav = sl.nextWord (stream)
-		sd.play(wav)
-		# from time import sleep 
-		# sleep (1)
-		# sd.wait ()
-		wav = transRaw (wav)
-		# wav = rd.record ('Start saying ... ',time=2)
-		# wav = trimWord (processWave (wav.flatten ()))
-		# print (wav)
-		pred = lobe.predict (wav.reshape (1,wav.shape[0], wav.shape[1]))
-		print (pred)
-		# vz.plot (wav)
-		# vz.show ()
-		if pred[0][0]>pred[0][1]:
-			print ("-------- YES sir you call me?")
-			beep ()
-		else:
-			print ("You have said something")
+	# 	# if np.amax(wav) - np.amin(wav) <= 2500:
+	# 	# 	continue
+	# 	wav = sl.nextWord (stream)
+	# 	sd.play(wav)
+	# 	# from time import sleep 
+	# 	# sleep (1)
+	# 	# sd.wait ()
+	# 	wav = transRaw (wav)
+	# 	# wav = rd.record ('Start saying ... ',time=2)
+	# 	# wav = trimWord (processWave (wav.flatten ()))
+	# 	# print (wav)
+	# 	pred = lobe.predict (wav.reshape (1,wav.shape[0], wav.shape[1]))
+	# 	print (pred)
+	# 	# vz.plot (wav)
+	# 	# vz.show ()
+	# 	if pred[0][0]>pred[0][1]:
+	# 		print ("-------- YES sir you call me?")
+	# 		beep ()
+	# 	else:
+	# 		print ("You have said something")
 if __name__=='__main__':
 	main ()
