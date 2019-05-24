@@ -7,10 +7,7 @@ import sounddevice as sd
 import matplotlib.pyplot as plt
 import soundlit as sl
 import os
-# from tkinter import *
 import keras
-# from keras.models import Sequential
-# from keras.layers import Dense, Dropout, Activation, LSTM, Flatten, TimeDistributed, Conv1D, MaxPooling1D, MaxPooling2D, Conv2D
 from keras import backend as K
 import python_speech_features as psf
 import random as rand
@@ -18,39 +15,38 @@ from standardize import loadSilences
 from train import load_lobe, getMfcc
 import winsound
 def beep(f=500, d=500):
-	"""
-	Uses the Sound-playing interface for Windows to play a beep
-		
-	Arguments
-	f: Frequency of the beep in Hz
-	d: Duration of the beep in ms
-	"""
 	winsound.Beep(f,d) 
 	
 def listenToBoss ():
 	import speech_recognition as sr
-	from os import system
+	
 	r = sr.Recognizer ()
-	with sr.Microphone () as source:
-		audio = r.listen (source)
 	try:
+		with sr.Microphone () as source:
+			audio = r.listen (source, timeout=3)
 		txt = r.recognize_google (audio,language='vi-VN')
 	except:
-		return 'Error';
+		return 'error'
 
-	if txt.lower () == 'exit':
-		return 'exit'
+	if txt.lower () == 'hủy':
+		return txt.lower ()
 
-	res = txt
-	txt = ''
-	for i in res:
-		if i != ' ':
-			txt += i
+	return txt
+
+def action ():
+	from os import system
+	print ('Yes')
+	beep ()
+	print ('Tôi đang lắng nghe ...')
+	val = listenToBoss ()
+
+	if val == 'tắt máy':
+		system ('shutdown /h')
+	elif val != 'error' and val != 'hủy':
+		if '.' in val:
+			system ('"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" %s' % val)
 		else:
-			txt += '+'
-
-	system ('"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" google.com/search?q=%s' % txt)
-	return res
+			system ('"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" google.com/search?q=%s' % val.replace (' ', '+'))
 
 # record the word then mix with loaded silences
 def record (stream,silences,fixedLen=44100,chunk=2048,threshold=100):
@@ -77,7 +73,7 @@ def listen (stream, silences, fixedLen=44100):
 	return mfcc
 
 def main (): 
-	lobe = load_lobe ()
+	lobe = load_lobe () # model.keras
 	stream = sl.getStream(CHUNK=1024*2)
 	silences = loadSilences ()
 
@@ -86,17 +82,11 @@ def main ():
 		mfcc = listen (stream, silences)
 		# vz.plot (mfcc)
 		# vz.show ()
-
 		mfcc = mfcc.reshape (1, mfcc.shape[0], 1)
 		result = lobe.predict (mfcc)
-		
 		print (result)
-		if result[0][0] > 0.5:
-			print ('Yes')
-			beep ()
-			print ('Nói để tìm kiếm ...')
-			val = listenToBoss ()
-			print (val)
+		if result[0][0] > 0.9:
+			action ()
 		else:
 			print ('No')
 
