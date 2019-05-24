@@ -17,5 +17,4 @@ Mean that you have to get at list 3 folder with: sliences, A_KEY_WORD, NON_KEY_W
 
 Contact me at fb.me/vinhphuc.tadang if any issue exists or contribute to the project (not really a project :) )
 
-
-
+When using prediction with sigmoid activation, use threshold 0.9 to judge the right word
