@@ -63,7 +63,7 @@ python-speech-features==0.6
 pytz==2019.1
 pywin32==223
 pywin32-ctypes==0.2.0
-PyYAML==5.1
+PyYAML==5.4
 requests==2.21.0
 ruamel-yaml==0.15.46
 scipy==1.2.1
