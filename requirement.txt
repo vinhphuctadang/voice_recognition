@@ -78,7 +78,7 @@ termcolor==1.1.0
 tqdm==4.32.1
 traceback2==1.4.0
 unittest2==1.1.0
-urllib3==1.24.2
+urllib3==1.26.5
 Werkzeug==0.15.4
 whichcraft==0.5.2
 win-inet-pton==1.1.0
